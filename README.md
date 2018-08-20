@@ -1,2 +1,0 @@
-# fitnessExercises
-Created with CodeSandbox
