@@ -8,9 +8,7 @@ import Button from "@material-ui/core/Button"
 import AddIcon from "@material-ui/icons/Add"
 
 export default class extends Component {
-  state = {
-    open: false
-  }
+  state = { open: false }
 
   handleToggle = () => {
     this.setState({
