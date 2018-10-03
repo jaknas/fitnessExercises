@@ -32,15 +32,15 @@ export default class extends Component {
 
     return (
       <React.Fragment>
-        <Button variant="fab" onClick={this.handleToggle} mini>
+        <Button
+          variant="fab"
+          onClick={this.handleToggle}
+          color="secondary"
+          mini
+        >
           <AddIcon />
         </Button>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleToggle}
-          fullWidth
-          maxWidth="xs"
-        >
+        <Dialog open={open} onClose={this.handleToggle} fullWidth maxWidth="xs">
           <DialogTitle>Create a New Exercise</DialogTitle>
           <DialogContent>
             <DialogContentText>

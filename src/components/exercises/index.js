@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React from 'react';
-=======
-import React, { Fragment } from 'react';
->>>>>>> csb-1537917512745
 import {
   Grid,
   Paper,
@@ -14,94 +10,117 @@ import {
   IconButton
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-<<<<<<< HEAD
-=======
 import EditIcon from '@material-ui/icons/Edit';
+import { withStyles } from '@material-ui/core/styles';
 import Form from './Form';
->>>>>>> csb-1537917512745
 
-const styles = {
-  Paper: {
-    padding: 20,
-    marginTop: 10,
-    marginBottom: 10,
-    height: 500,
-    overflowY: 'auto'
-  }
-};
-
-export default ({
-  muscles,
-  exercises,
-  category,
-  editMode,
-  onSelect,
-  exercise,
-  exercise: {
-    id,
-    title = 'Welcome!',
-    description = 'Please select an exercise from the list on the left'
+const styles = theme => ({
+  paper: {
+    padding: theme.spacing.unit * 3,
+    overflowY: 'auto',
+    [theme.breakpoints.up('sm')]: {
+      marginTop: 5,
+      height: 'calc(100% - 10px)'
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: '100%'
+    }
   },
-<<<<<<< HEAD
-  onDelete
-=======
-  onDelete,
-  onSelectEdit,
-  onEdit
->>>>>>> csb-1537917512745
-}) => (
-  <Grid container spacing={24}>
-    <Grid item sm>
-      <Paper style={styles.Paper}>
-        {exercises.map(
-          ([group, exercises]) =>
-            !category || category === group ? (
-              <React.Fragment key={group}>
-                <Typography
-                  variant="headline"
-                  style={{ textTransform: 'capitalize' }}
-                >
-                  {group}
-                </Typography>
-                <List component="ul">
-                  {exercises.map(({ id, title }) => (
-                    <ListItem key={id} button onClick={() => onSelect(id)}>
-                      <ListItemText primary={title} />
-                      <ListItemSecondaryAction>
-<<<<<<< HEAD
-=======
-                        <IconButton onClick={() => onSelectEdit(id)}>
-                          <EditIcon />
-                        </IconButton>
->>>>>>> csb-1537917512745
-                        <IconButton onClick={() => onDelete(id)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
-              </React.Fragment>
-            ) : null
-        )}
-      </Paper>
+  '@global': {
+    'html, body, #root': {
+      height: '100%'
+    }
+  },
+  container: {
+    [theme.breakpoints.up('sm')]: {
+      height: 'calc(100% - 64px - 48px)'
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: 'calc(100% - 56px - 48px)'
+    }
+  },
+  item: {
+    [theme.breakpoints.down('xs')]: {
+      height: '50%'
+    }
+  }
+});
+
+export default withStyles(styles)(
+  ({
+    classes,
+    muscles,
+    exercises,
+    category,
+    editMode,
+    onSelect,
+    exercise,
+    exercise: {
+      id,
+      title = 'Welcome!',
+      description = 'Please select an exercise from the list on the left'
+    },
+    onDelete,
+    onSelectEdit,
+    onEdit
+  }) => (
+    <Grid container className={classes.container}>
+      <Grid item className={classes.item} xs={12} sm={6}>
+        <Paper className={classes.paper}>
+          {exercises.map(
+            ([group, exercises]) =>
+              !category || category === group ? (
+                <React.Fragment key={group}>
+                  <Typography
+                    color="secondary"
+                    variant="headline"
+                    style={{ textTransform: 'capitalize' }}
+                  >
+                    {group}
+                  </Typography>
+                  <List component="ul">
+                    {exercises.map(({ id, title }) => (
+                      <ListItem key={id} button onClick={() => onSelect(id)}>
+                        <ListItemText primary={title} />
+                        <ListItemSecondaryAction>
+                          <IconButton
+                            color="primary"
+                            onClick={() => onSelectEdit(id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="primary"
+                            onClick={() => onDelete(id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    ))}
+                  </List>
+                </React.Fragment>
+              ) : null
+          )}
+        </Paper>
+      </Grid>
+      <Grid item className={classes.item} xs={12} sm={6}>
+        <Paper className={classes.paper}>
+          <Typography variant="display1" color="secondary" gutterBottom>
+            {title}
+          </Typography>
+          {editMode ? (
+            <Form
+              key={id}
+              muscles={muscles}
+              onSubmit={onEdit}
+              exercise={exercise}
+            />
+          ) : (
+            <Typography variant="subheading">{description}</Typography>
+          )}
+        </Paper>
+      </Grid>
     </Grid>
-    <Grid item sm>
-      <Paper style={styles.Paper}>
-        <Typography variant="display1" gutterBottom>
-          {title}
-        </Typography>
-        {editMode ? (
-          <Form
-            key={id}
-            muscles={muscles}
-            onSubmit={onEdit}
-            exercise={exercise}
-          />
-        ) : (
-          <Typography variant="subheading">{description}</Typography>
-        )}
-      </Paper>
-    </Grid>
-  </Grid>
+  )
 );
