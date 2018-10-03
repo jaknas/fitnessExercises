@@ -3,34 +3,37 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Header, Footer } from './layouts';
 import Exercises from './exercises/';
 import { muscles, exercises } from '../store';
+import { Provider } from '../context';
 
 export default class extends Component {
   state = {
     exercises,
-    exercise: {},
+    exercise: {}
   };
 
   getExercisesByMuscles() {
     const initExercises = muscles.reduce(
       (exercises, category) => ({
         ...exercises,
-        [category]: [],
+        [category]: []
       }),
-      {},
+      {}
     );
 
     return Object.entries(
       this.state.exercises.reduce((exercises, exercise) => {
         const { muscles } = exercise;
+
         exercises[muscles] = [...exercises[muscles], exercise];
+
         return exercises;
-      }, initExercises),
+      }, initExercises)
     );
   }
 
   handleCategorySelect = category =>
     this.setState({
-      category,
+      category
     });
 
   handleExerciseSelect = id => {
@@ -39,63 +42,56 @@ export default class extends Component {
 
     this.setState(({ exercises }) => ({
       exercise: exercises.find(ex => ex.id === id),
-      editMode: false,
+      editMode: false
     }));
   };
 
   handleExerciseCreate = exercise =>
     this.setState(({ exercises }) => ({
-      exercises: [...exercises, exercise],
+      exercises: [...exercises, exercise]
     }));
 
   handleExerciseDelete = id =>
     this.setState(({ exercises, exercise, editMode }) => ({
       exercises: exercises.filter(ex => ex.id !== id),
       editMode: exercise.id === id ? false : editMode,
-      exercise: exercise.id === id ? {} : exercise,
+      exercise: exercise.id === id ? {} : exercise
     }));
 
   handleExerciseSelectEdit = id =>
     this.setState(({ exercises }) => ({
       exercise: exercises.find(ex => ex.id === id),
-      editMode: true,
+      editMode: true
     }));
 
   handleExerciseEdit = exercise =>
     this.setState(({ exercises }) => ({
       exercises: [...exercises.filter(ex => ex.id !== exercise.id), exercise],
-      exercise,
+      exercise
     }));
 
+  getContext = () => ({
+    muscles,
+    ...this.state,
+    exercisesByMuscles: this.getExercisesByMuscles(),
+    onCategorySelect: this.handleCategorySelect,
+    onCreate: this.handleExerciseCreate,
+    onEdit: this.handleExerciseEdit,
+    onSelectEdit: this.handleExerciseSelectEdit,
+    onDelete: this.handleExerciseDelete,
+    onSelect: this.handleExerciseSelect
+  });
+
   render() {
-    const exercises = this.getExercisesByMuscles(),
-      { category, exercise, editMode } = this.state;
     return (
-      <React.Fragment>
+      <Provider value={this.getContext()}>
         <CssBaseline />
-        <Header
-          muscles={muscles}
-          onExerciseCreate={this.handleExerciseCreate}
-        />
+        <Header />
 
-        <Exercises
-          exercise={exercise}
-          exercises={exercises}
-          category={category}
-          editMode={editMode}
-          muscles={muscles}
-          onSelect={this.handleExerciseSelect}
-          onDelete={this.handleExerciseDelete}
-          onSelectEdit={this.handleExerciseSelectEdit}
-          onEdit={this.handleExerciseEdit}
-        />
+        <Exercises />
 
-        <Footer
-          category={category}
-          muscles={muscles}
-          onSelect={this.handleCategorySelect}
-        />
-      </React.Fragment>
+        <Footer />
+      </Provider>
     );
   }
 }
