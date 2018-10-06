@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/App';
+import { render } from 'react-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import { red, amber } from '@material-ui/core/colors';
 
@@ -19,10 +18,12 @@ const theme = createMuiTheme({
   }
 });
 
-const rootElement = document.getElementById('root');
-ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <App />
-  </MuiThemeProvider>,
-  rootElement
+import(/* webpackChunkName: 'app' */ './components/App').then(
+  ({ default: App }) =>
+    render(
+      <MuiThemeProvider theme={theme}>
+        <App />
+      </MuiThemeProvider>,
+      document.getElementById('root')
+    )
 );
